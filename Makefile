@@ -9,7 +9,7 @@ lint:	hooks			## fmt vet staticcheck
 	staticcheck ./...
 
 test: hooks 		## execute tests
-	go test ./... -race
+	go test ./... -race -cover
 
 hooks: .git/hooks/pre-commit
 

@@ -1,4 +1,9 @@
 # Schedule
+
+[![build-img]][build-url]
+[![pkg-img]][pkg-url]
+[![reportcard-img]][reportcard-url]
+
 This package is a dependency free utility package.  It is a collection of time related value objects.  The main reason it exists is because a `time.Time` is one specific moment in time.  It is a Date, Clock, and Timezone all in one.
 
 Sometimes we just want a `Date` or `DateRange` which does not care about times or time zones.  Sometimes we just want a `Clock` or `TimeSlot` which does not care about dates.  We wanted to know if a `Date` was within a `DateRange` without having to worry about what timezone it is in and making sure the start date was 00:00 end date was at 23:59.  It is a date, the time doesn't matter in these cases.
@@ -292,3 +297,10 @@ type CalendarMap map[Date][]WeekdayTimeSlot
 ```
 HasDate(date Date) bool
 ```
+
+[build-img]: https://github.com/tempcke/schedule/actions/workflows/test.yml/badge.svg
+[build-url]: https://github.com/tempcke/schedule/actions
+[pkg-img]: https://pkg.go.dev/badge/tempcke/schedule
+[pkg-url]: https://pkg.go.dev/github.com/tempcke/schedule
+[reportcard-img]: https://goreportcard.com/badge/tempcke/schedule
+[reportcard-url]: https://goreportcard.com/report/tempcke/schedule
