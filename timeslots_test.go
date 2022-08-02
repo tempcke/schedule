@@ -362,6 +362,14 @@ func TestWeekdayTimeSlots_Overlap(t *testing.T) {
 		assert.True(t, slot1.OverlapsWith(slot2))
 	})
 
+	t.Run("time slots overlap with  all day time slot", func(t *testing.T) {
+		var (
+			slot1 = schedule.WeekdayTimeSlotFromString("Monday")
+			slot2 = schedule.WeekdayTimeSlotFromString("Monday 06:30-07:30")
+		)
+		assert.True(t, slot1.OverlapsWith(slot2))
+	})
+
 	t.Run("two similar slots on different days do not overlap", func(t *testing.T) {
 		var (
 			slot1 = schedule.WeekdayTimeSlotFromString("Monday 06:00-07:00")

@@ -108,6 +108,10 @@ func (ts TimeSlot) IsZero() bool {
 	return ts.Start.min+ts.End.min == 0
 }
 
+func (ts TimeSlot) Equal(ts2 TimeSlot) bool {
+	return ts.Start.Equal(ts2.Start) && ts.End.Equal(ts2.End)
+}
+
 type WeekdayTimeSlot struct {
 	day  Weekday
 	slot TimeSlot
@@ -197,7 +201,7 @@ func (s WeekdayTimeSlot) OverlapsWith(wts2 WeekdayTimeSlot) bool {
 	s0, s1 := slots[0], slots[1]
 
 	if s0.Weekday() == s1.Weekday() {
-		return s1.Start().Before(s0.End()) || s0.crossesMidnight()
+		return s0.IsAllDay() || s1.Start().Before(s0.End()) || s0.crossesMidnight()
 	}
 
 	if s0.crossesMidnight() && s1.Weekday() == s0.Weekday().Next() {

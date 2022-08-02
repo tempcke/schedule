@@ -106,6 +106,9 @@ func (dr DateRange) Exceeds(parentDR DateRange) bool {
 	return dr.Until == nil || dr.Until.After(*parentDR.Until)
 }
 
+// Merge keeps the intersection of both date ranges
+// so given dr is jan01-jan31 and dr2 is jan15-feb15
+// then result is jan15-jan31
 func (dr DateRange) Merge(dr2 DateRange) DateRange {
 	if !dr.Overlaps(dr2) {
 		return ZeroDateRange()
