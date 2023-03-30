@@ -68,11 +68,6 @@ func (c Clock) ToDuration() time.Duration {
 
 // MarshalJSON marshals the enum as a quoted json string
 func (c Clock) MarshalJSON() ([]byte, error) {
-	if c.IsZero() {
-		buffer := bytes.NewBufferString(`"`)
-		buffer.WriteString(`"`)
-		return buffer.Bytes(), nil
-	}
 	buffer := bytes.NewBufferString(`"`)
 	buffer.WriteString(c.String())
 	buffer.WriteString(`"`)

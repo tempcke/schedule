@@ -141,6 +141,33 @@ func TestClock(t *testing.T) {
 	}
 }
 
+func TestClock_UnmarshalJSON(t *testing.T) {
+	type Clocks struct {
+		A, C, E schedule.Clock
+		B, D, F *schedule.Clock
+	}
+	jsonBytes := []byte(`{"A":"", "B": "", "C": null, "D": null}`)
+
+	t.Run("UnmarshalJSON empty or null", func(t *testing.T) {
+		// decode
+		var clocks Clocks
+		err := json.Unmarshal(jsonBytes, &clocks)
+		require.NoError(t, err)
+
+		// ""
+		assert.True(t, clocks.A.IsZero())
+		assert.True(t, clocks.B == nil || clocks.B.IsZero())
+
+		// null
+		assert.True(t, clocks.C.IsZero())
+		assert.True(t, clocks.D == nil || clocks.D.IsZero())
+
+		// ommitted
+		assert.True(t, clocks.E.IsZero())
+		assert.True(t, clocks.F == nil || clocks.F.IsZero())
+	})
+}
+
 func TestClock_BeforeAfterEqual(t *testing.T) {
 	var (
 		c1259 = schedule.NewClock(12, 59)

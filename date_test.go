@@ -67,6 +67,54 @@ func TestDate(t *testing.T) {
 	})
 }
 
+func TestDate_jsonEncodeDecode(t *testing.T) {
+	var (
+		year  = 2022
+		month = time.February
+		day   = 1
+	)
+	d := schedule.NewDate(year, month, day)
+
+	t.Run("encode date", func(t *testing.T) {
+		// encode
+		var jsonDate = `"` + d.String() + `"`
+		jsonBytes, err := json.Marshal(d)
+		require.NoError(t, err)
+		assert.Equal(t, jsonDate, string(jsonBytes))
+
+		// decode
+		var decodedDate schedule.Date
+		err = json.Unmarshal(jsonBytes, &decodedDate)
+		require.NoError(t, err)
+		assert.Equal(t, d, decodedDate)
+	})
+
+	t.Run("UnmarshalJSON empty or null", func(t *testing.T) {
+		type Dates struct {
+			A, C, E schedule.Date
+			B, D, F *schedule.Date
+		}
+		jsonBytes := []byte(`{"A":"", "B": "", "C": null, "D": null}`)
+
+		// decode
+		var dates Dates
+		err := json.Unmarshal(jsonBytes, &dates)
+		require.NoError(t, err)
+
+		// ""
+		assert.True(t, dates.A.IsZero())
+		assert.True(t, dates.B.IsZero())
+
+		// null
+		assert.True(t, dates.C.IsZero())
+		assert.True(t, dates.D.IsZero())
+
+		// ommitted
+		assert.True(t, dates.E.IsZero())
+		assert.True(t, dates.F.IsZero())
+	})
+}
+
 func TestDate_Scan(t *testing.T) {
 	// this is an example of how you scan into a schedule.Date
 	var fromString = "2022-01-01"

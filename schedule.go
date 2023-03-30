@@ -46,21 +46,27 @@ func (s Schedule) HasTimeSlots() bool {
 }
 
 // Merge does a merge on both the schedule dateRanges and the timeslots
-//   The intended use for this is to merge a parent schedule with a sub schedule
-//   the sub schedule is a subset of the parent, however it may have all-day entries
-//   which allow for config on "any" timeslots for that day
-//   if timeslots exist on only the parent, they are excluded
-//   if timeslots exist on only the child, they are invalid, and therefore excluded
+//
+//	The intended use for this is to merge a parent schedule with a sub schedule
+//	the sub schedule is a subset of the parent, however it may have all-day entries
+//	which allow for config on "any" timeslots for that day
+//	if timeslots exist on only the parent, they are excluded
+//	if timeslots exist on only the child, they are invalid, and therefore excluded
+//
 // dateRange
-//   a merged dateRange is where they intersect
-//   - ex: jan01-jan30 merged with jan15-feb15 results in jan15-jan30
+//
+//	a merged dateRange is where they intersect
+//	- ex: jan01-jan30 merged with jan15-feb15 results in jan15-jan30
+//
 // timeslots
-//   are only kept in a merge when they exist in all schedules without conflicting
-//   exception is when one schedule has an all day timeslot and another specific timeslots
-//   this results in the specific timeslots being kept in favor of the all day
-//   - ex: Mon7-8,Tues8-9,Wed merged with Mon7-8,Tues6-7,Wed7-8 results in Mon7-8,Wed7-8
-//         Tues809,Tues6-7 were excluded because they only exist in one schedule
-//         Wed7-8 was included because the other schedule was for Wed all day
+//
+//	are only kept in a merge when they exist in all schedules without conflicting
+//	exception is when one schedule has an all day timeslot and another specific timeslots
+//	this results in the specific timeslots being kept in favor of the all day
+//	- ex: Mon7-8,Tues8-9,Wed merged with Mon7-8,Tues6-7,Wed7-8 results in Mon7-8,Wed7-8
+//	      Tues809,Tues6-7 were excluded because they only exist in one schedule
+//	      Wed7-8 was included because the other schedule was for Wed all day
+//
 // see TestSchedulesMerge for a good example
 func (s Schedule) Merge(schedules ...Schedule) Schedule {
 	if len(schedules) == 0 {

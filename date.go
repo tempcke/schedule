@@ -80,9 +80,10 @@ func (d Date) Pointer() *Date        { return &d }
 func (d *Date) IsZero() bool         { return d == nil || *d == Date{} }
 
 // Sub subtracts two dates, returning the number of days between
-//  today.Sub(today)     = 0
-//  today.Sub(yesterday) = 1
-//  yesterday.Sub(today) = -1
+//
+//	today.Sub(today)     = 0
+//	today.Sub(yesterday) = 1
+//	yesterday.Sub(today) = -1
 func (d Date) Sub(date Date) int {
 	return int(math.Round(d.ToTime().Sub(date.ToTime()).Hours() / 24))
 }
@@ -124,12 +125,15 @@ func (d *Date) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	t, err := time.Parse(ymdFormat, s)
-	if err != nil {
-		return err
+	if len(s) > 0 {
+		t, err := time.Parse(ymdFormat, s)
+		if err != nil {
+			return err
+		}
+
+		*d = newDateFromTime(t)
 	}
 
-	*d = newDateFromTime(t)
 	return nil
 }
 
