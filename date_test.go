@@ -113,6 +113,17 @@ func TestDate_jsonEncodeDecode(t *testing.T) {
 		assert.True(t, dates.E.IsZero())
 		assert.True(t, dates.F.IsZero())
 	})
+	t.Run("UnmarshalJSON invalid input", func(t *testing.T) {
+		type Dates struct {
+			A schedule.Date
+		}
+		jsonBytes := []byte(`{"A":"invalid-input"}`)
+
+		// decode
+		var dates Dates
+		err := json.Unmarshal(jsonBytes, &dates)
+		require.Error(t, err)
+	})
 }
 
 func TestDate_Scan(t *testing.T) {

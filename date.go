@@ -125,13 +125,12 @@ func (d *Date) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	if len(s) > 0 {
+	if s != "" {
 		t, err := time.Parse(ymdFormat, s)
 		if err != nil {
-			return err
+			return fmt.Errorf(`can not parse as a date "%s"`, s)
 		}
-
-		*d = newDateFromTime(t)
+		*d = NewDate(t.Year(), t.Month(), t.Day())
 	}
 
 	return nil
