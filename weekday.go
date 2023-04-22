@@ -11,10 +11,6 @@ import (
 )
 
 var (
-	ErrInvalidDayName = errors.New("invalid day name")
-)
-
-var (
 	// read/write from/to json values
 	_ json.Marshaler   = (*Weekday)(nil)
 	_ json.Unmarshaler = (*Weekday)(nil)
@@ -90,6 +86,15 @@ func (w Weekday) MarshalText() (text []byte, err error) {
 }
 
 func (w *Weekday) UnmarshalJSON(b []byte) error {
+	if len(b) > 0 && string(b[0]) != `"` {
+		// value is an int, not a string
+		var v int
+		if err := json.Unmarshal(b, &v); err != nil {
+			return err
+		}
+		*w = Weekday(v % 7) // allow large ints to roll over to next week, so 7 is 0 is Sunday
+		return nil
+	}
 	return w.UnmarshalText(b)
 }
 

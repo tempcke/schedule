@@ -2,6 +2,7 @@ package schedule_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 
@@ -28,20 +29,6 @@ func TestDate(t *testing.T) {
 	assert.Equal(t, day, dt.Day())
 
 	assert.Equal(t, dateString, schedule.NewDateFromTime(dt).String())
-
-	t.Run("json", func(t *testing.T) {
-		// encode
-		var jsonDate = `"` + d.String() + `"`
-		jsonBytes, err := json.Marshal(d)
-		require.NoError(t, err)
-		assert.Equal(t, jsonDate, string(jsonBytes))
-
-		// decode
-		var decodedDate schedule.Date
-		err = json.Unmarshal(jsonBytes, &decodedDate)
-		require.NoError(t, err)
-		assert.Equal(t, d, decodedDate)
-	})
 
 	t.Run("today", func(t *testing.T) {
 		now := time.Now()
@@ -123,6 +110,26 @@ func TestDate_jsonEncodeDecode(t *testing.T) {
 		var dates Dates
 		err := json.Unmarshal(jsonBytes, &dates)
 		require.Error(t, err)
+	})
+	t.Run("decode datetime into date", func(t *testing.T) {
+		// so if someone passes a full RFC3339 lets parse the date and ignore the time
+		var (
+			now   = time.Now()
+			today = schedule.Today()
+		)
+		var tests = []string{
+			now.Format(time.RFC3339),
+			now.Format(time.RFC3339Nano),
+			now.Format("2006-01-02 15:04:05"),
+		}
+		for _, input := range tests {
+			var (
+				jsonStr = fmt.Sprintf(`{"Date": "%v"}`, input)
+				v       = struct{ Date schedule.Date }{}
+			)
+			require.NoError(t, json.Unmarshal([]byte(jsonStr), &v), input)
+			assert.Equal(t, today, v.Date, input)
+		}
 	})
 }
 

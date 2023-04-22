@@ -125,13 +125,20 @@ func (d *Date) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	if s != "" {
-		t, err := time.Parse(ymdFormat, s)
-		if err != nil {
-			return fmt.Errorf(`can not parse as a date "%s"`, s)
-		}
-		*d = NewDate(t.Year(), t.Month(), t.Day())
+	if s == "" {
+		return nil
 	}
+
+	if len(s) < len(ymdFormat) {
+		return fmt.Errorf(`%w: %s`, ErrInvalidDateString, s)
+	}
+
+	s = s[0:len(ymdFormat)] // only keep the first bit in case string includes time info
+	t, err := time.Parse(ymdFormat, s)
+	if err != nil {
+		return fmt.Errorf(`%w: %s`, ErrInvalidDateString, s)
+	}
+	*d = NewDate(t.Year(), t.Month(), t.Day())
 
 	return nil
 }

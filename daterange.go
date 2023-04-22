@@ -1,13 +1,7 @@
 package schedule
 
 import (
-	"errors"
 	"math"
-)
-
-var (
-	ErrFromRequired = errors.New("from is required")
-	ErrPastUntil    = errors.New("until can not be before from")
 )
 
 // DateRange represents a set of days
