@@ -10,8 +10,8 @@ import (
 // from Jan1 until Jan2 is two days
 // when Until is nil it means forever
 type DateRange struct {
-	From  Date  `json:"validFrom"`
-	Until *Date `json:"validUntil,omitempty"`
+	From  Date  `json:"from"`
+	Until *Date `json:"until,omitempty"`
 }
 
 func NewDateRange() DateRange {
