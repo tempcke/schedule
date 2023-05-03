@@ -128,7 +128,12 @@ func TestDate_jsonEncodeDecode(t *testing.T) {
 				v       = struct{ Date schedule.Date }{}
 			)
 			require.NoError(t, json.Unmarshal([]byte(jsonStr), &v), input)
-			assert.Equal(t, today, v.Date, input)
+			assert.Equal(t, today.String(), v.Date.String(), input)
+		}
+		for _, input := range tests {
+			var d = schedule.ParseDate(input)
+			require.NotNil(t, d)
+			assert.Equal(t, today.String(), d.String(), input)
 		}
 	})
 }

@@ -51,6 +51,9 @@ func NewDateFromTime(t time.Time) Date {
 }
 
 func ParseDate(s string) *Date {
+	if len(s) > len(ymdFormat) {
+		s = s[0:len(ymdFormat)] // only keep the first bit in case string includes time info
+	}
 	t, err := time.Parse(ymdFormat, s)
 	if err != nil {
 		return nil
