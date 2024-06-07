@@ -54,6 +54,11 @@ func TestDateRange_Overlaps(t *testing.T) {
 			schedule.NewDateRange(),
 			true,
 		},
+		"in range no until, from=until": {
+			schedule.NewDateRange().WithFrom(jan1).WithUntil(jan15),
+			schedule.NewDateRange().WithFrom(jan15),
+			true,
+		},
 	}
 
 	for name, test := range tests {
