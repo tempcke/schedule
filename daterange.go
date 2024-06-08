@@ -79,11 +79,11 @@ func (dr DateRange) Overlaps(dr2 DateRange) bool {
 	}
 
 	if a.Until == nil && b.Until != nil {
-		return b.Until.After(a.From)
+		return b.Until.After(a.From) || b.Until.Equal(a.From)
 	}
 
 	if b.Until == nil && a.Until != nil {
-		return a.Until.After(b.From)
+		return a.Until.After(b.From) || a.Until.Equal(b.From)
 	}
 
 	return b.ContainsDate(a.From) || b.ContainsDate(*a.Until) ||
