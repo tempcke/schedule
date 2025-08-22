@@ -289,3 +289,27 @@ func TestDateRange_Exceeds(t *testing.T) {
 		})
 	}
 }
+
+func TestDateRange_Contains(t *testing.T) {
+	var (
+		d0  = schedule.Today()
+		d1  = d0.AddDate(0, 0, 1)
+		d2  = d0.AddDate(0, 0, 2)
+		d3  = d0.AddDate(0, 0, 3)
+		dr1 = schedule.NewDateRangeUntil(d0, &d1)
+		dr2 = schedule.NewDateRangeUntil(d1, &d2)
+		dr3 = schedule.NewDateRangeUntil(d2, nil)
+	)
+
+	assert.True(t, dr1.ContainsDate(d0))
+	assert.True(t, dr1.ContainsDate(d1))
+	assert.True(t, dr2.ContainsDate(d1))
+	assert.True(t, dr2.ContainsDate(d2))
+	assert.True(t, dr3.ContainsDate(d2))
+	assert.True(t, dr3.ContainsDate(d3))
+
+	assert.True(t, dr1.Overlaps(dr2))
+	assert.True(t, dr2.Overlaps(dr1))
+	assert.True(t, dr2.Overlaps(dr3))
+	assert.True(t, dr3.Overlaps(dr2))
+}
